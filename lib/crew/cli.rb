@@ -57,7 +57,8 @@ module Crew
       opts = Trollop::options(args) do
         opt :force, "Force creation"
       end
-      Home.init(opts)
+      args << opts
+      Home.init(*args)
     end
 
     ## general

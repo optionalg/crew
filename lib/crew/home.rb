@@ -14,19 +14,17 @@ module Crew
     def self.init(*args)
       opts = args.last.is_a?(Hash) ? args.pop : {}
       path = args.size == 1 ? args.shift : Dir.pwd
+      path = File.join(path, ".crew")
       crew_config_path = File.join(path, CREW_CONF_FILE)
-
-      raise "#{CREW_CONF_FILE} file is in the way" if File.exist?(crew_config_path) && !opts[:force]
-
-      hints = Array(opts[:hints] ? opts[:hints] : [])
+      raise "#{crew_config_path} file is in the way" if File.exist?(crew_config_path) && !opts[:force]
+      FileUtils.mkdir_p(path)
       template = File.read(File.expand_path("../template/config.erb", __FILE__))
-      out = ERB.new(template).result(OpenStruct.new(hints: hints).instance_eval { binding })
+      out = ERB.new(template).result
       puts "Writing #{CREW_CONF_FILE} file"
-      puts "Using hints: #{hints.inspect}" if hints && !hints.empty?
       File.open(crew_config_path, "w") do |f|
         f << out
       end
-      new(crew_config_path)
+      new(path)
     end
 
     attr_reader :data_path, :home_path, :task_path, :callbacks, :context, :logger, :in_setup

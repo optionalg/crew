@@ -5,10 +5,6 @@ module Crew
         @home = home
       end
 
-      def home(path)
-        @home.home_path = path
-      end
-
       def before(&cb)
         @home.add_callback(:before, &cb)
       end
