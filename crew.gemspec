@@ -21,7 +21,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "pry", "~>0.9.12.2"
   spec.add_dependency "trollop", "2.0"
   spec.add_dependency "nokogiri", "~>1.6.0"
-  spec.add_dependency "rainbow", "~>1.1.4"
+  spec.add_dependency "rainbow", "~>1.99.1"
   spec.add_dependency "net-ssh", "~>2.7.0"
   spec.add_dependency "net-scp", "~>1.1.2"
   spec.add_dependency "json", "~> 1.8.1"
