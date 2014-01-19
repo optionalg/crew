@@ -1,0 +1,25 @@
+desc "Installs git"
+
+verify do
+  assert fs_which?("git")
+end
+
+test do
+  run!
+end
+
+hints "darwin"
+
+setup do
+  setup_homebrew
+end
+
+run do
+  brew_install "git"
+end
+
+hints "ubuntu"
+
+run do
+  apt_get_install "git"
+end

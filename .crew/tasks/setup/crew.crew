@@ -1,0 +1,16 @@
+desc "Sets up crew"
+
+verify do
+  assert fs_which?("crew")
+end
+
+run do
+  save_file File.expand_path("../../../../install.sh", __FILE__), "/tmp/install.sh"
+  sh "source /tmp/install.sh"
+  # sh 'source <(curl -s https://raw.github.com/joshbuddy/crew/master/install.sh)'
+end
+
+test do
+  run!
+  sh "crew run setup_sublime3"
+end

@@ -1,0 +1,13 @@
+require 'uri'
+
+desc "Performs URL escaping on a value"
+
+arg "value"
+
+run do
+  URI.escape(args.value)
+end
+
+test do
+  assert_equal "%20", run!(" ")
+end

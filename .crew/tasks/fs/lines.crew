@@ -1,0 +1,13 @@
+desc "Get all the lines in a file"
+
+arg "path"
+
+run do
+  fs_read(args.path).split("\n")
+end
+
+test do
+  fs_write("/tmp/line-test", "line 1\nline 2")
+  assert_equal ['line 1', 'line 2'], run!("/tmp/line-test")
+  fs_remove "/tmp/line-test"
+end

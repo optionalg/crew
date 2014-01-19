@@ -1,0 +1,24 @@
+desc "Installs XQuartz"
+
+hints "darwin"
+
+opt "target", default: "/"
+
+verify do
+  assert fs_exists?("/Applications/Utilities/XQuartz.app")
+end
+
+run do
+  response = http_get("https://xquartz.macosforge.org/landing/")
+  urls = html_xpath_select(response, "//table[@class='download-list']//a/@href")
+  url = urls.first
+  http_download(url, preserve_on_error: true) do |file_path|
+    dmg_mount(file_path) do |mount_point|
+      sh("/usr/sbin/installer -pkg #{escape(fs_join(mount_point, "XQuartz.pkg"))} -target #{escape(args.target)}", sudo: true)
+    end
+  end
+end
+
+test do
+  run!
+end

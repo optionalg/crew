@@ -1,0 +1,8 @@
+desc "Check the tools state for a fusion vm"
+
+arg "path"
+
+run "darwin" do
+  out, err, code = sh_with_code "#{vmrun_bin} checkToolsState #{escape(args.path)}"
+  out.strip
+end

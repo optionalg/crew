@@ -1,0 +1,22 @@
+desc "Return the user of a pid"
+
+arg "pid"
+
+run do
+  sh("ps #{args.pid} -o user").split("\n", 2)[1].chomp
+end
+
+run "ubuntu" do
+  list = sh("ps -eo pid,euser").chomp.split("\n").map do |line|
+    line.strip.split(/\s/)
+  end
+  list.find {|e| e[0] == args.pid.to_s}[1]
+end
+
+test do
+  setup_screen
+  sh "screen -d -m sleep 1"
+  pid = ps_map.keep_if {|key, value| value[/sleep 1/]}.keys[0]
+  assert_equal user_current, run!(pid)
+  ps_wait pid
+end

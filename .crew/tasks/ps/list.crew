@@ -1,0 +1,17 @@
+desc "List of all pids on this system"
+
+run do
+  out = sh("ps ax")
+  lines = out.lines
+  lines.shift # remove header
+  lines.map { |line| Integer(line[/(\d+)/, 1]) }
+end
+
+test do
+  setup_screen
+  sh "screen -d -m sleep 3"
+  pid = ps_map.keep_if {|key, value| value[/sleep 3/]}.keys[0]
+  assert_include run!, pid
+  sleep 5
+  assert_not_include run!, pid
+end

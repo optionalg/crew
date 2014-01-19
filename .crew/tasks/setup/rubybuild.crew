@@ -1,0 +1,19 @@
+desc "Installs ruby-build"
+
+hints "darwin"
+
+verify do
+  sh "ruby-build --help"
+end
+
+run do
+  path = fs_join(env_home, "ruby-build")
+  git_clone "git://github.com/sstephenson/ruby-build.git", dest: path
+  cd path
+  sh "./install.sh", sudo: true
+end
+
+test do
+  run!
+  sh "ruby-build 1.9.3-p448 ~/local/ruby-1.9.3-p448"
+end

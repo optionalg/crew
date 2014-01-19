@@ -1,0 +1,12 @@
+desc "list existing snapshots for fusion vm"
+
+arg "path"
+
+run "darwin" do
+  snapshots = []
+  sh("#{vmrun_bin} listSnapshots #{escape(args.path)}").each_line do |line|
+    next if line[/Total snapshots/]
+    snapshots << line.chomp
+  end
+  snapshots
+end

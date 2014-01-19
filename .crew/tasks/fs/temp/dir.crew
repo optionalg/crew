@@ -1,0 +1,25 @@
+desc "Provides a temp directory"
+
+block required: true do
+  arg "dir"
+end
+
+run do
+  path = fs_join("/tmp", uuid)
+  begin
+    sh "mkdir -p #{path}"
+    args.block.call(path)
+  ensure
+    fs_remove path, recursive: true
+  end
+end
+
+test do
+  path = nil
+  run! do |p|
+    path = p
+    assert fs_directory?(path)
+  end
+  assert path
+  assert_not fs_directory?(path)
+end

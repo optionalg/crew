@@ -1,0 +1,19 @@
+desc "Gets the version of an installed package"
+
+hints "darwin"
+
+arg "name"
+
+setup do
+  setup_homebrew
+end
+
+run do
+  assert brew_installed?(args.name)
+  sh("brew info #{escape(args.name)}").lines.first[/[^ ]+ [^ ]+ ([^ ]+),/, 1]
+end
+
+test do
+  brew_install "wget"
+  assert_equal wget_version, run!("wget")
+end

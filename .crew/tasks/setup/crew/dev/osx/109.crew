@@ -1,0 +1,15 @@
+desc "Setup crew for osx 10.9"
+
+hints "darwin"
+
+run do
+  setup_crew_dev
+  say "You'll need to create an image for osx 10.9"
+  poll "Waiting for image to exist at Documents/Virtual\ Machines.localized/osx_109.vmwarevm/osx_109.vmx" do
+    assert fs_exists?(File.expand_path("Documents/Virtual\ Machines.localized/osx_109.vmwarevm/osx_109.vmx", ENV['HOME']))
+  end
+end
+
+# test do
+#  run!
+# end

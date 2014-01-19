@@ -1,0 +1,14 @@
+desc "Tests if file exists"
+
+arg :path
+
+run do
+  sh?("test -e #{escape(args.path)}")
+end
+
+test do
+  sh "touch /tmp/testing-file-exists"
+  assert run!("/tmp/testing-file-exists")
+  sh "rm /tmp/testing-file-exists"
+  assert !run!("/tmp/testing-file-exists")
+end

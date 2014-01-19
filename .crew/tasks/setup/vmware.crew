@@ -1,0 +1,17 @@
+desc "Sets up Vmware fusion"
+
+hints "darwin"
+
+verify do
+  assert fs_exists?("/Applications/VMware Fusion.app")
+end
+
+run do
+  http_download("http://www.vmware.com/go/tryfusion", target: "vmware-fusion.dmg") do |file_path|
+    dmg_install_app file_path, "VMware Fusion"
+  end
+end
+
+test do
+  run!
+end

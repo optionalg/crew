@@ -1,0 +1,22 @@
+desc "Renames a file"
+
+arg :from
+arg :to
+
+verify do
+  assert !fs_exists?(args.from)
+  assert fs_exists?(args.to)
+end
+
+run do
+  sh "mv #{escape(args.from)} #{escape(args.to)}"
+end
+
+test do
+  path1 = "/tmp/path1"
+  path2 = "/tmp/path2"
+  save_data("contents", path1)
+  run! path1, path2
+  assert_equal "contents", fs_read(path2)
+  assert !fs_exists?(path1)
+end

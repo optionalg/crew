@@ -1,0 +1,62 @@
+desc "Downloads a file"
+
+arg "url"
+
+opt "preserve", default: false
+opt "preserve_on_error", default: true
+opt "overwrite", default: false
+opt "target", "The target path of the download"
+
+block do
+  arg "The path to the downloaded file"
+end
+
+setup do
+  setup_curl
+end
+
+run do
+  name = args.target || File.basename(args.url)
+  if args.overwrite || !fs_exists?(name) || fs_size(name).zero?
+    sh "curl -L #{escape(url_escape(args.url))} -o #{escape(name)}"
+  end
+  assert fs_exists?(name)
+  if args.block
+    begin
+      args.block.call(name)
+      fs_remove(name) unless args.preserve
+    rescue
+      fs_remove(name) unless args.preserve_on_error
+      raise
+    end
+  else
+    name
+  end
+end
+
+test do
+  cd "/tmp"
+  file_path = run! "https://raw.github.com/joshbuddy/anybase/master/README.rdoc"
+  assert_match fs_read(file_path), /Anybase/
+end
+
+test do
+   cd "/tmp"
+   file_path = nil
+   run!("https://raw.github.com/joshbuddy/anybase/master/README.rdoc") do |p|
+     file_path = p
+     assert_match fs_read(file_path), /Anybase/
+   end
+   assert !fs_exists?(file_path)
+end
+
+test do
+  cd "/tmp"
+  file_path = nil
+  run! "https://raw.github.com/joshbuddy/anybase/master/README.rdoc", preserve: true do |p|
+    file_path = p
+    assert_match fs_read(file_path), /Anybase/
+  end
+  assert fs_exists?(file_path)
+  sh "rm #{file_path}"
+end

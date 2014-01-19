@@ -1,0 +1,20 @@
+desc "Removes a package via apt-get"
+
+arg "name", "The name of the package to install"
+
+hints "ubuntu"
+
+verify do
+  assert !apt_installed?(args.name)
+end
+
+run do
+  sh "apt-get remove -y #{args.name}", sudo: true
+end
+
+test do
+  apt_get_install "sl"
+  assert apt_installed?("sl")
+  run! "sl"
+  assert !apt_installed?("sl")
+end

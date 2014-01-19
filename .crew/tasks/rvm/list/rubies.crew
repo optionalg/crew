@@ -1,0 +1,22 @@
+desc "Lists the rubies installed via RVM"
+
+setup do
+  setup_rvm
+end
+
+run do
+  list = sh("rvm list rubies")[/rvm rubies\n\n(.*?)\n\n/, 1]
+  if list
+    list.split(/\n/).map do |line|
+      line[/[=* ]*([^ ]+)/, 1]
+    end
+  else
+    []
+  end
+end
+
+test do
+  list = run!
+  rvm_install "ruby-2.0.0-p353", default: true
+  assert_equal list + ["ruby-2.0.0-p353"], run!
+end

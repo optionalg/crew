@@ -1,0 +1,12 @@
+desc "Show the authors in git"
+
+run do
+  sh("git log --format='%aN' | sort -u | uniq").chomp.split(/\n/)
+end
+
+test do
+  cd "/tmp"
+  git_clone "https://github.com/joshbuddy/anybase.git"
+  cd "/tmp/anybase"
+  assert_equal ["Brad Gessler", "Josh Hull", "Joshua Hull"], run!
+end

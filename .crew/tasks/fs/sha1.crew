@@ -1,0 +1,14 @@
+desc "returns the sha1 of a file"
+
+arg "path"
+
+run "darwin", "linux" do
+  sh("shasum -a 1 #{escape(args.path)}")[/[0-9a-f]{40}/]
+end
+
+test do
+  sha_path = "/tmp/sha_path_test"
+  contents = "test contents"
+  save_data(contents, sha_path)
+  assert_equal Digest::SHA1.hexdigest(contents), run!(sha_path)
+end

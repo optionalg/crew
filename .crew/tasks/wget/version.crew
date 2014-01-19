@@ -1,0 +1,10 @@
+desc "Gets the version of wget installed"
+
+run do
+  sh("wget --version").split(/\s/)[2]
+end
+
+test do
+  setup_wget
+  assert_match sh("wget --version"), run!
+end

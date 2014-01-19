@@ -1,0 +1,12 @@
+desc "create a new snapshot fusion vm"
+
+arg "path"
+arg "name"
+
+verify "darwin" do
+  assert_include vmrun_snapshots(args.path), args.name
+end
+
+run "darwin" do
+  sh("#{vmrun_bin} snapshot #{escape(args.path)} #{escape(args.name)}")
+end

@@ -1,0 +1,9 @@
+desc "Returns the current directory"
+
+run do
+  sh("pwd").chomp
+end
+
+test do
+  assert_equal sh("echo $PWD").chomp, run!
+end

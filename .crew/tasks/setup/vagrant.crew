@@ -1,0 +1,40 @@
+desc "Installs vagrant"
+
+opt "target", default: "/"
+
+test do
+  run!
+end
+
+hints "darwin"
+
+verify do
+  assert fs_exists?("/Applications/Vagrant/bin/vagrant")
+end
+
+run do
+  cd env_home
+  version_url = html_xpath_select(http_get("http://downloads.vagrantup.com/"), "//a[@class='tag']/@href")[0]
+  installer = html_xpath_select(http_get(version_url), "//a[@class='file type-dmg']/@href")[0]
+  http_download(installer, preserve_on_error: true) do |file_path|
+    dmg_mount(file_path) do |mount_point|
+      sh("/usr/sbin/installer -pkg #{escape(fs_join(mount_point, "Vagrant.pkg"))} -target #{escape(args.target)}", sudo: true)
+    end
+  end
+end
+
+hints "ubuntu"
+
+verify do
+  assert fs_which?("vagrant")
+end
+
+run do
+  cd env_home
+  version_url = html_xpath_select(http_get("http://downloads.vagrantup.com/"), "//a[@class='tag']/@href")[0]
+  # TODO this needs fixin
+  installer = html_xpath_select(http_get(version_url), "//a[@class='file type-deb']/@href")[hints.include?('arch_64') ? 1 : 0]
+  http_download(installer, preserve_on_error: true) do |file_path|
+    dpkg_install(file_path)
+  end
+end

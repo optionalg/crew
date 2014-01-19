@@ -1,0 +1,38 @@
+desc "Clone a repo from git"
+
+arg "url", "URL to clone from"
+opt "dest", "Target path"
+opt "ref", "The ref to clone"
+
+setup do
+  setup_git
+end
+
+verify do
+  target_dir = args.dest || File.basename(args.url, File.extname(args.url))
+  assert fs_directory?(target_dir)
+  assert fs_directory?(fs_join(target_dir, ".git"))
+end
+
+run do
+  cmd = "git clone #{args.url}"
+  if args.dest
+    cmd << " #{args.dest}"
+  end
+  sh cmd
+  if args.ref
+    cd args.dest
+    sh "git reset --hard #{escape(args.ref)}"
+  end
+end
+
+test do
+  cd "/tmp"
+  run! "https://github.com/joshbuddy/anybase.git"
+end
+
+test do
+  cd "/tmp"
+  run! "https://github.com/joshbuddy/anybase.git", dest: "testing"
+  assert fs_directory?("testing")
+end

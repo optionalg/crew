@@ -1,0 +1,30 @@
+desc "Wait for a pid to stop"
+
+arg "pid", type: Integer
+opt "timeout"
+
+run do
+  poll "Waiting for pid #{args.pid}", timeout: args.timeout do
+    assert_not ps_alive?(args.pid)
+  end
+end
+
+test do
+  setup_screen
+  sh "screen -d -m sleep 5"
+  pid = ps_map.keep_if {|key, value| value[/sleep 5/]}.keys[0]
+  assert ps_alive?(pid)
+  run! pid
+  assert_not ps_alive?(pid)
+end
+
+test do
+  setup_screen
+  sh "screen -d -m sleep 5"
+  pid = ps_map.keep_if {|key, value| value[/sleep 5/]}.keys[0]
+  start_time = Time.new.to_f
+  assert_fails { run! pid, timeout: 1 }
+  assert Time.new.to_f - start_time < 1.1
+  run! pid
+  assert !ps_alive?(pid)
+end

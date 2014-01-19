@@ -1,0 +1,13 @@
+desc "Sets up wget"
+
+verify do
+  assert fs_which?("wget")
+end
+
+run "darwin" do
+  brew_install "wget"
+end
+
+test do
+  run!
+end

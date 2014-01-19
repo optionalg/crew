@@ -1,0 +1,24 @@
+desc "Add a line"
+
+arg "path", "The path to the file"
+arg "line", "The line to add"
+
+verify do
+  lines = fs_lines(args.path)
+  assert_include fs_lines(args.path), args.line
+end
+
+run do
+  fs_write args.path, (fs_lines(args.path) << args.line).join("\n")
+end
+
+test do
+  fs_write "/tmp/lines", "line 1\nline 2"
+  run! "/tmp/lines", "line 3"
+end
+
+test do
+  fs_write "/tmp/lines", "line 1\nline 2"
+  run! "/tmp/lines", "line 1"
+  assert_equal "line 1\nline 2", fs_read("/tmp/lines")
+end

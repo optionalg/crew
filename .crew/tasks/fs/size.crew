@@ -1,0 +1,19 @@
+desc "returns the size of a file"
+
+arg "path"
+
+run "darwin" do
+  Integer(sh "stat -f \"%z\" #{escape(args.path)}")
+end
+
+# Integer(sh("du -b #{escape(args.path)}").split(/\n/)[0])
+run "linux" do
+  Integer(sh "stat -c \"%s\" #{escape(args.path)}")
+end
+
+test do
+  size_path = "/tmp/size_path_test"
+  contents = "test contents"
+  save_data(contents, size_path)
+  assert_equal contents.size, run!(size_path)
+end

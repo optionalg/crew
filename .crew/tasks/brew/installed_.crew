@@ -1,0 +1,19 @@
+desc "Check if a package is installed using homebrew"
+
+arg "name", "The name of the package to check"
+
+hints "darwin"
+
+setup do
+  setup_homebrew
+end
+
+run do
+  /Not installed/m !~ sh("brew info #{escape(args.name)}")
+end
+
+test do
+  assert !run!("fortune")
+  sh "brew install fortune"
+  assert run!("fortune")
+end

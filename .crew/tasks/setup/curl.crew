@@ -1,0 +1,25 @@
+desc "Installs curl"
+
+verify do
+  assert fs_which?("curl")
+end
+
+test do
+  run!
+end
+
+hints "darwin"
+
+setup do
+  setup_homebrew
+end
+
+run do
+  brew_install "curl"
+end
+
+hints "ubuntu"
+
+run do
+  apt_get_install "curl"
+end

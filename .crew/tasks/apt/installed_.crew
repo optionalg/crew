@@ -1,0 +1,21 @@
+desc "Tests if a package is installed"
+
+arg "name", "The name of the package to install"
+opt "version", "The version of the package to install"
+
+hints "ubuntu"
+
+run do
+  installed = sh("apt-cache policy #{args.name}") !~ /Installed: \(none\)/m
+  if args.version && installed
+    args.version == apt_get_version(args.name)
+  else
+    installed
+  end
+end
+
+test do
+  assert !run!("sl")
+  apt_get_install "sl"
+  assert run!("sl")
+end

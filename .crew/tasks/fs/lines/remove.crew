@@ -1,0 +1,20 @@
+desc "Remove a line"
+
+arg "path", "The path to the file"
+arg "line", "The line to remove"
+
+verify do
+  assert_not_include fs_lines(args.path), args.line
+end
+
+run do
+  lines = fs_lines(args.path)
+  lines.delete(args.line)
+  fs_write args.path, lines.join("\n")
+end
+
+test do
+  fs_write "/tmp/lines", "line 1\nline 2\nline 3"
+  run! "/tmp/lines", "line 2"
+  assert_equal ['line 1', 'line 3'], fs_lines("/tmp/lines")
+end

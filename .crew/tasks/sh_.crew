@@ -1,0 +1,13 @@
+desc "Attempts to run a command"
+
+arg "command"
+
+run do
+  _, _, status = sh_with_code(args.command)
+  status == 0
+end
+
+test do
+  assert_not sh? "exit 1"
+  assert sh? "exit 0"
+end

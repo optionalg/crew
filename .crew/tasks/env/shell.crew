@@ -1,0 +1,9 @@
+desc "Returns the value of $SHELL"
+
+run do
+  env "SHELL"
+end
+
+test "darwin" do
+  assert_equal "/bin/bash", run!
+end

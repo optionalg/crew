@@ -1,0 +1,17 @@
+desc "Change your shell"
+
+arg "shell_path"
+
+verify do
+  assert_equal args.shell_path, env_shell
+end
+
+run do
+  user = user_current
+  sh "chsh -s #{args.shell_path} #{escape(user)}", sudo: true
+  reconnect!
+end
+
+test do
+  run! "/bin/sh"
+end

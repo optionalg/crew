@@ -1,0 +1,9 @@
+desc "Returns the current user"
+
+run do
+  sh("whoami").chomp
+end
+
+test do
+  assert_equal env("USER"), run!
+end

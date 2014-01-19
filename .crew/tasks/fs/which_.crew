@@ -1,0 +1,15 @@
+desc "Check if a file is in the path"
+
+arg :file, "The file to look for"
+
+run do
+  sh? "which #{escape(args.file)}"
+end
+
+test do
+  assert run!("bash")
+end
+
+test do
+  assert !run!("not-bash")
+end

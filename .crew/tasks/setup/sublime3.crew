@@ -1,0 +1,23 @@
+desc "Install sublime edit 3"
+
+verify 'darwin' do
+  assert fs_exists?("/Applications/Sublime Text.app")
+  if fs_writeable_dir?("/usr/local/bin")
+    assert fs_exists?("/usr/local/bin/subl")
+  end
+end
+
+run 'darwin' do
+  response = http_get("http://www.sublimetext.com/3")
+  url = html_xpath_select(response, "//a[text()='OS X']/@href")[0]
+  http_download(url) do |file_path|
+    dmg_install_app file_path, "Sublime Text"
+  end
+  if fs_writeable_dir?("/usr/local/bin")
+  	sh "ln -s #{escape("/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl")} /usr/local/bin/subl"
+  end
+end
+
+test 'darwin' do
+  run!
+end

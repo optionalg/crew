@@ -1,0 +1,10 @@
+desc "Lists running fusion vms"
+
+run "darwin" do
+  vms = []
+  sh("#{vmrun_bin} list").each_line do |line|
+    next if line[/Total running VMs/]
+    vms << line.chomp
+  end
+  vms
+end

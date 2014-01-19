@@ -1,0 +1,20 @@
+desc "Installs a rubygem"
+
+arg "name"
+
+setup do
+  setup_ruby
+end
+
+verify do
+  assert_not gem_list[args.name]
+end
+
+run do
+  sh "gem uninstall #{escape(args.name)}"
+end
+
+test do
+  gem_install "asdf"
+  run! "asdf"
+end

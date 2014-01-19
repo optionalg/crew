@@ -1,0 +1,11 @@
+desc "Suspend a fusion vm"
+
+arg "path"
+
+verify "darwin" do
+  assert_not_include vmrun_list, args.path
+end
+
+run "darwin" do
+  sh "#{vmrun_bin} suspend #{escape(args.path)}"
+end

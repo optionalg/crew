@@ -1,0 +1,9 @@
+desc "Returns a short version of $SHELL (just bash, zsh, etc)"
+
+run do
+  env_shell.split(/\//).last
+end
+
+test "darwin" do
+  assert_equal "bash", run!
+end

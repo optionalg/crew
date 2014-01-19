@@ -1,0 +1,6 @@
+desc "Returns the binary for running vmware fuction"
+
+run do
+  fs_exists? "/Applications/VMware\ Fusion.app/Contents/Library/vmrun"
+  escape "/Applications/VMware Fusion.app/Contents/Library/vmrun"
+end

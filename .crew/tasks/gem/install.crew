@@ -1,0 +1,25 @@
+desc "Installs a rubygem"
+
+arg "name"
+opt "version"
+
+setup do
+  setup_ruby
+end
+
+verify do
+  assert gem_list[args.name]
+  assert_include gem_list[args.name], args.version if args.version
+end
+
+run do
+  cmd = "gem install #{escape(args.name)}"
+  if args.version
+    cmd << " --version #{escape(args.version)}"
+  end
+  sh cmd
+end
+
+test do
+  run! "asdf"
+end

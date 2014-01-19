@@ -1,0 +1,17 @@
+desc "Send a signal to a pid"
+
+arg "signal"
+arg "pid"
+
+run do
+  sh "kill -#{args.signal} #{args.pid}"
+end
+
+test do
+  setup_screen
+  sh "screen -d -m sleep 3"
+  pid = ps_map.keep_if {|key, value| value[/sleep 3/]}.keys[0]
+  assert ps_alive?(pid)
+  ps_kill(9, pid)
+  assert_not ps_alive?(pid)
+end

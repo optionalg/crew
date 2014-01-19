@@ -1,0 +1,21 @@
+desc "Install dpkg"
+
+hints "ubuntu"
+
+arg "path"
+
+run do
+  sh "dpkg -i #{escape(args.path)}", sudo: true
+end
+
+test do
+  # TODO
+  url = if hints.include?("arch_64")
+    "http://files.vagrantup.com/packages/a40522f5fabccb9ddabad03d836e120ff5d14093/vagrant_1.3.5_x86_64.deb"
+  elsif hints.include?("arch_32")
+    "http://files.vagrantup.com/packages/a40522f5fabccb9ddabad03d836e120ff5d14093/vagrant_1.3.5_i686.deb"
+  end
+  http_download(url, preserve_on_error: true) do |file_path|
+    run!(file_path)
+  end
+end

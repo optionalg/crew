@@ -1,0 +1,12 @@
+desc "Tests if file is a directory"
+
+arg "path"
+
+run do
+  sh?("test -d #{escape(args.path)}")
+end
+
+test do
+  assert run!("/tmp")
+  assert_not run!("/qweeqwasdewq")
+end

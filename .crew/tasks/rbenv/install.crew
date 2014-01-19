@@ -1,0 +1,23 @@
+desc "Installs a ruby with rbenv"
+
+arg "version"
+
+hints "darwin"
+
+setup do
+  setup_rbenv
+  setup_git
+  git_clone "git://github.com/sstephenson/ruby-build.git", dest: fs_join(env_home, ".rbenv/plugins/ruby-build")
+end
+
+verify do
+  assert_include rbenv_versions, args.version
+end
+
+run do
+  sh "rbenv install -f #{args.version}"
+end
+
+test do
+  run! "1.9.3-p125"
+end

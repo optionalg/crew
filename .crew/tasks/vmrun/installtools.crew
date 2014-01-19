@@ -1,0 +1,12 @@
+desc "Check the tools state for a fusion vm"
+
+arg "path"
+
+verify "darwin" do
+  assert_equal "running", vmrun_checktoolsstate(args.path)
+end
+
+run "darwin" do
+  out, err, code = sh_with_code "#{vmrun_bin} installTools #{escape(args.path)}"
+  raise
+end

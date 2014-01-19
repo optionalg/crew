@@ -1,0 +1,35 @@
+desc "Copies a file"
+
+arg "from",      "The source"
+arg "to",        "The destination"
+opt "recursive", "Specifies whether to load asynchronously", default: false
+
+verify do
+  assert fs_exists?(args.from)
+  assert fs_exists?(args.to)
+  assert_fs_equal args.from, args.to unless args.recursive
+end
+
+run do
+  cmd = "cp"
+  if args.recursive
+    cmd << " -r"
+  end
+  sh "#{cmd} #{escape(args.from)} #{escape(args.to)}"
+end
+
+test "dawrin" do
+  sh "rm -rf /tmp/copy"
+  sh "mkdir -p /tmp/copy"
+  sh "dd if=/dev/random of=/tmp/copy/source count=1000"
+  run! "/tmp/copy/source", "/tmp/copy/dest"
+  assert_fs_equal "/tmp/copy/source", "/tmp/copy/dest"
+end
+
+test "linux" do
+  sh "rm -rf /tmp/copy"
+  sh "mkdir -p /tmp/copy"
+  sh "dd if=/dev/random of=/tmp/copy/source count=2 bs=1M"
+  run! "/tmp/copy/source", "/tmp/copy/dest"
+  assert_fs_equal "/tmp/copy/source", "/tmp/copy/dest"
+end

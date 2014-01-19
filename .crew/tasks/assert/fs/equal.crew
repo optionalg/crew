@@ -1,0 +1,25 @@
+desc "Compare two files"
+
+arg "expected", "The expected file"
+arg "actual",   "The actual file"
+
+run do
+  assert_equal fs_sha1(args.expected), fs_sha1(args.actual)
+  assert_equal fs_size(args.expected), fs_size(args.actual)
+end
+
+test "darwin" do
+  sh "rm -rf /tmp/copy"
+  sh "mkdir -p /tmp/copy"
+  sh "dd if=/dev/random of=/tmp/copy/source count=1000"
+  sh "cp /tmp/copy/source /tmp/copy/dest"
+  assert_fs_equal "/tmp/copy/source", "/tmp/copy/dest"
+end
+
+test "linux" do
+  sh "rm -rf /tmp/copy"
+  sh "mkdir -p /tmp/copy"
+  sh "dd if=/dev/random of=/tmp/copy/source count=2 bs=1M"
+  sh "cp /tmp/copy/source /tmp/copy/dest"
+  assert_fs_equal "/tmp/copy/source", "/tmp/copy/dest"
+end

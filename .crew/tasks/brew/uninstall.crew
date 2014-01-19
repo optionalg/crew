@@ -1,0 +1,20 @@
+desc "Uninstall a package using homebrew"
+
+arg "name"
+
+hints "darwin"
+
+verify do
+  assert /Not installed/m =~ sh("brew info #{args.name}")
+end
+
+run do
+  sh("brew uninstall #{args.name}")
+end
+
+test do
+  brew_install "fortune"
+  sh "fortune"
+  run! "fortune"
+  assert_not sh?("fortune")
+end

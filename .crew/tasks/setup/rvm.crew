@@ -1,0 +1,28 @@
+desc "Installs rvm"
+
+setup "darwin" do
+  setup_homebrew
+  setup_darwin_clitools
+  setup_git
+  setup_curl
+end
+
+setup "ubuntu" do
+  setup_curl
+end
+
+verify "darwin" do
+  assert_match sh("type rvm | head -n 1").chomp, /function/
+end
+
+verify "ubuntu" do
+  assert_match sh("type rvm | head -n 1").chomp, /function/
+end
+
+run do
+  sh "\\curl -sSL https://get.rvm.io | bash"
+end
+
+test do
+  run!
+end

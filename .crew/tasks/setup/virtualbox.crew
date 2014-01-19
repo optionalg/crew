@@ -1,0 +1,22 @@
+desc "Install VirtualBox"
+
+hints "darwin"
+
+verify do
+  assert fs_exists?("/Applications/VirtualBox.app")
+end
+
+run do
+  response = http_get("https://www.virtualbox.org/wiki/Downloads")
+  urls = html_xpath_select(response, "//h2[@id='VirtualBoxbinaries']/../ul/li//a/@href")
+  url = urls.find {|url| url['OSX'] }
+  http_download(url, preserve: true) do |file_path|
+    dmg_mount(file_path) do |mount_point|
+      sh("/usr/sbin/installer -pkg #{escape(fs_join(mount_point, "VirtualBox.pkg"))} -target /", sudo: true)
+    end
+  end
+end
+
+test do
+  run!
+end

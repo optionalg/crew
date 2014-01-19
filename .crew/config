@@ -1,0 +1,122 @@
+before do
+  crew_boot
+end
+
+test "osx-10.8" do
+  context "osx-10.8"
+  hints "darwin"
+
+  prepare "ruby-dev" do
+    setup do
+      setup_ruby
+    end
+
+    include "gem_install", "gem_list", "gem_uninstall"
+  end
+
+  prepare "dev" do
+    setup do
+      setup_gcc
+      setup_homebrew
+    end
+
+    include /^setup_/, /^git_/, /^brew_/, /^setup_crew_dev/, /^rbenv_/, /^rvm_/, /^ruby_/
+    exclude "setup_dev"
+  end
+
+  prepare "all" do
+    setup { }
+    include :all
+  end
+end
+
+test "osx-10.9" do
+  context "osx-10.9"
+  hints "darwin"
+
+  prepare "ruby-dev" do
+    setup do
+      setup_ruby
+    end
+
+    include "gem_install", "gem_list", "gem_uninstall"
+  end
+
+  prepare "dev" do
+    setup do
+      setup_gcc
+      setup_homebrew
+    end
+
+    include /^setup_/, /^git_/, /^brew_/, /^setup_crew_dev/, /^rbenv_/, /^ruby_/
+    exclude "setup_dev"
+  end
+
+  prepare "all" do
+    setup { }
+    include :all
+  end
+end
+
+
+test "ubuntu-12.04-64" do
+  context "ubuntu-12.04-64"
+  hints "linux", "ubuntu"
+
+  prepare "ruby-dev" do
+    setup do
+      apt_get_update
+      setup_ruby
+    end
+
+    include "gem_install", "gem_list", "gem_uninstall"
+  end
+
+  prepare "git" do
+    setup do
+      apt_get_update
+      setup_git
+    end
+
+    include /^git_/
+  end
+
+  prepare "apt_get_update" do
+    setup do
+      apt_get_update
+    end
+
+    include :all
+  end
+end
+
+test "ubuntu-12.04-i386" do
+  context "ubuntu-12.04-i386"
+  hints "linux", "ubuntu"
+
+  prepare "ruby-dev" do
+    setup do
+      apt_get_update
+      setup_ruby
+    end
+
+    include "gem_install", "gem_list", "gem_uninstall"
+  end
+
+  prepare "git" do
+    setup do
+      apt_get_update
+      setup_git
+    end
+
+    include /^git_/
+  end
+
+  prepare "apt_get_update" do
+    setup do
+      apt_get_update
+    end
+
+    include :all
+  end
+end

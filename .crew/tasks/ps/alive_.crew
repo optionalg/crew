@@ -1,0 +1,16 @@
+desc "Test if a pid is alive"
+
+arg "pid", type: Integer
+
+run do
+  sh? "kill -0 #{args.pid}"
+end
+
+test do
+  setup_screen
+  sh "screen -d -m sleep 3"
+  pid = ps_map.keep_if {|key, value| value[/sleep 3/]}.keys[0]
+  assert run!(pid)
+  sleep 5
+  assert !run!(pid)
+end

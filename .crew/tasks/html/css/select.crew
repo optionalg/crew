@@ -1,0 +1,15 @@
+require 'nokogiri'
+
+desc "Selects nodes via a css selector"
+
+arg "body"
+arg "selector"
+
+run do
+  Nokogiri::HTML(args.body).css(args.selector).map(&:to_s)
+end
+
+test do
+  result = run!("<html><body><p class=test>Hello</p></body></html>", "p.test")
+  assert_equal ["<p class=\"test\">Hello</p>"], result
+end

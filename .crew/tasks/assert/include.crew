@@ -1,0 +1,13 @@
+desc "Looks for value within an array and raises if it's not there"
+
+arg "search", "The set of values to search in"
+arg "expected", "The value expected to be found"
+
+run do
+  assert args.search.include?(args.expected), "expected #{args.search.inspect} to include #{args.expected.inspect}"
+end
+
+test do
+  run! [1, 2, 3], 1
+  assert_fails { run! [1, 2, 3], 4 }
+end

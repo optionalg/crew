@@ -1,0 +1,9 @@
+desc "Generate a UUID"
+
+run do
+  sh("uuidgen").chomp
+end
+
+test do
+  assert_not_equal run!, run!
+end

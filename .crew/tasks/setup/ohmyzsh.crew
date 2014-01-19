@@ -1,0 +1,12 @@
+desc "Sets up oh-my-zsh"
+
+run "darwin" do
+  git_clone "git://github.com/robbyrussell/oh-my-zsh.git", dest: fs_join(env_home, ".oh-my-zsh")
+  fs_copy fs_join(env_home, ".zshrc"), fs_join(env_home, ".zshrc.orig") if fs_exists?(fs_join(env_home, ".zshrc"))
+  fs_copy fs_join(env_home, ".oh-my-zsh/templates/zshrc.zsh-template"), fs_join(env_home, ".zshrc")
+  sh_change "/bin/zsh"
+end
+
+test "darwin" do
+  run!
+end

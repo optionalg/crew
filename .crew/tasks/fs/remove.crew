@@ -1,0 +1,29 @@
+desc "Returns the current directory"
+
+arg "path"
+opt "recursive", default: false
+
+verify do
+  assert !fs_exists?(args.path)
+end
+
+run do
+  opts = args.recursive ? '-r ' : ''
+  sh "rm #{opts}#{escape(args.path)}"
+end
+
+test do
+  sh "touch /tmp/rm-file"
+  assert fs_exists?("/tmp/rm-file")
+  run! "/tmp/rm-file"
+  assert !fs_exists?("/tmp/rm-file")
+end
+
+test do
+  sh "rm -rf /tmp/rm-file-dir"
+  sh "mkdir /tmp/rm-file-dir"
+  assert fs_directory?("/tmp/rm-file-dir")
+  assert_fails { run! "/tmp/rm-file-dir" }
+  run! "/tmp/rm-file-dir", recursive: true
+  assert !fs_directory?("/tmp/rm-file-dir")
+end

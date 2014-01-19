@@ -1,0 +1,29 @@
+desc "Determine the os version and provide appropriate hints"
+
+run do
+  uname = sh("uname -a")
+  case uname
+  when /^darwin/i
+    hint "darwin"
+    product_name, product_version, build_version = sh("sw_vers").split(/\n/, 3).map {|s| s[/:\s*(.*)/, 1]}
+    hint product_version
+  when /^linux/i
+    hint "linux"
+    hint uname[/x86_64/] ? :arch_64 : :arch_32
+    version = fs_read("/proc/version")
+    case version
+    when /ubuntu/i
+      hint "ubuntu"
+    end
+  end
+end
+
+test "darwin" do
+  run!
+  assert_include hints, "darwin"
+end
+
+test "ubuntu" do
+  run!
+  assert_include hints, "ubuntu"
+end

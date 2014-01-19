@@ -1,0 +1,22 @@
+desc "Sets up homebrew for usage"
+
+hints "darwin"
+
+setup do
+  setup_gcc
+end
+
+verify do
+  assert fs_which?("brew")
+end
+
+run do
+  sh "ls", sudo: true # get sudo
+  sh 'ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go/install)"'
+end
+
+test do
+  run!
+  brew_install "wget"
+  assert_equal wget_version, brew_installed_version('wget')
+end

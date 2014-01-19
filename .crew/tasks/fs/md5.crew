@@ -1,0 +1,17 @@
+desc "returns the md5 of a file"
+
+arg "path"
+
+run "darwin" do
+  sh("md5 #{escape(args.path)}")[/[0-9a-f]{32}/]
+end
+
+run "linux" do
+  sh("md5sum #{escape(args.path)}")[/[0-9a-f]{32}/]
+end
+
+test do
+  require 'digest/md5'
+  save_data("this is my file", "/tmp/md5-test")
+  assert_equal Digest::MD5.hexdigest("this is my file"), run!("/tmp/md5-test")
+end

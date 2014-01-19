@@ -1,0 +1,9 @@
+desc "Describes the boot sequence for crew"
+
+run do
+  os_version
+end
+
+test do
+  run!
+end

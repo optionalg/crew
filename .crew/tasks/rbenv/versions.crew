@@ -1,0 +1,15 @@
+desc "Versions available to rbenv"
+
+hints "darwin"
+
+run do
+  out = sh("rbenv versions")
+  out.chomp.split("\n").map {|v| v[/[\* ]+(\S+)/, 1] }
+end
+
+test do
+  setup_rbenv
+  current_versions = run!
+  rbenv_install "1.9.3-p125"
+  assert_equal current_versions + ['1.9.3-p125'], run!
+end

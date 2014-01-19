@@ -1,0 +1,21 @@
+desc "Start a fusion vm"
+
+arg "path"
+opt "headless", default: false
+
+hints "darwin"
+
+verify do
+  assert_include vmrun_list, args.path
+end
+
+run do
+  poll("Starting VM") do
+    retryable(timeout: 5) do
+      sh "#{vmrun_bin} start #{escape(args.path)} #{args.headless ? 'nogui' : 'gui'}"
+    end
+  end
+  poll("Finding VM", timeout: 10, interval: 0.1) do
+    assert_include vmrun_list, args.path
+  end
+end

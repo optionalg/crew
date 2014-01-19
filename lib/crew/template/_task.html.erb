@@ -1,0 +1,34 @@
+<a name="<%=task.name%>"></a>
+<div class="task" id="<%=task.name%>">
+  <div class="search-result" onclick="this.nextElementSibling.style.display = 'block'; this.style.display='none'">
+    <div class="search-result-title" id="<%=task.name%>-search-result-title"><%=task.name%></div>
+    <div class="search-result-description" id="<%=task.name%>-search-result-description"><%=task.desc%></div>
+  </div>
+  <div class="task-info">
+   <a href="#" onclick="this.parentElement.previousElementSibling.style.display = 'block'; this.parentElement.style.display='none'; return false">[-] Collapse</a>
+    <div class="task-title">
+      <%=task.name %>
+    </div>
+    <% if task.platforms.empty? %>
+      <div class="task-platforms">Not tested on any platforms</div>
+    <% else %>
+      <div class="task-platforms">Tested on <% task.platforms.each do |platform| %>
+        <span class="platform <%=platform.status%>"><%=platform.name%></span>
+      <% end %></div>
+    <% end %>
+    <div class="task-description"> <%=task.desc %></div>
+    <div class="task-arguments">
+      <strong>Arguments:</strong>
+      <dl>
+      <% task.arguments.definitions.each do |argument| %>
+        <dt><span class="argument-name"><%= argument.name %></span> <span class="argument-type">(<%=argument.type%>)</span></dt>
+        <dd><%= argument.desc %></dd>
+      <% end %>
+      </dl>
+    </div>
+    <a href="#" id="<%=task.name%>-source-link" class="source-link" onclick="toggleSource('<%=task.name%>'); event.stopPropagation(); return false;">[+] Show Source</a>
+    <div class="source">
+      <pre><code class="xml"><%= task.source %></code></pre>
+    </div>
+  </div>
+</div>

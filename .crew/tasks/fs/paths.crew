@@ -1,0 +1,9 @@
+desc "Return an array of the current paths"
+
+run do
+	sh("echo $PATH").chomp.split(":")
+end
+
+test do
+  assert_equal sh("echo $PATH").chomp.split(":"), run!
+end

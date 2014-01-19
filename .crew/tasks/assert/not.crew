@@ -1,0 +1,14 @@
+desc "not"
+
+arg "value"
+
+run do
+  assert !args.value
+end
+
+test do
+  run! false
+  run! nil
+  assert_fails { run! true }
+  assert_fails { run! "asd" }
+end

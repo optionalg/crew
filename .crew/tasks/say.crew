@@ -1,0 +1,15 @@
+desc "Say something!"
+
+arg "phrase", "The thing to say"
+
+hints "darwin"
+
+run do
+  sh "say #{escape(args.phrase)}"
+end
+
+test do
+  sh "osascript -e 'set volume output muted true'"
+  run! "hello"
+  sh "osascript -e 'set volume output muted false'"
+end

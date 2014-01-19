@@ -1,0 +1,24 @@
+desc "List of all pids on this system"
+
+run do
+  out = sh("ps axww")
+  lines = out.lines
+  lines.shift # remove header
+  map = {}
+  lines.each do |line|
+    parts = line.strip.split(/\s+/, 5)
+    map[Integer(parts[0])] = parts[4]
+  end
+  map
+end
+
+test do
+  save_data "#!/bin/sh\n\nyes > /dev/null &", "/tmp/run.sh"
+  sh "chmod 755 /tmp/run.sh"
+  original_list = ps_list
+  sh "/tmp/run.sh"
+  pid = run!.keep_if {|key, value| value[/yes/]}.keys[0]
+  assert_include run!, pid
+  sh "kill -9 #{pid}"
+  assert_not_include run!, pid
+end

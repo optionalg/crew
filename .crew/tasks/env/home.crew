@@ -1,0 +1,9 @@
+desc "Returns the value of $HOME"
+
+run do
+  env "HOME"
+end
+
+test "darwin" do
+  assert_equal sh("cd ~; pwd").chomp, run!
+end

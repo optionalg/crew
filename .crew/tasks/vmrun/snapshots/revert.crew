@@ -1,0 +1,8 @@
+desc "revert to a snapshot fusion vm"
+
+arg "path"
+arg "name"
+
+run "darwin" do
+  sh("#{vmrun_bin} revertToSnapshot #{escape(args.path)} #{escape(args.name)}")
+end

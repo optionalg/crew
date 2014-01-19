@@ -1,0 +1,21 @@
+desc "Installs a ruby via RVM"
+
+arg "version"
+opt "default", default: false
+
+verify do
+  assert_include rvm_list_rubies, args.version
+end
+
+run do
+  sh "rvm install #{escape(args.version)}"
+  if args.default
+    "rvm --default use #{escape(args.version)}"
+  end
+end
+
+test do
+  setup_rvm
+  rvm_install "ruby-2.0.0-p353", default: true
+  assert_equal "2.0.0p353", ruby_version
+end

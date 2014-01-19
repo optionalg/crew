@@ -1,0 +1,16 @@
+desc "Checks for a match"
+
+arg "text"
+arg "matcher"
+
+run do
+  assert args.text[args.matcher], "Expected #{args.matcher.inspect} to match #{args.text.inspect}"
+end
+
+test do
+  run! "this is my sample test", /sample/
+end
+
+test do
+  assert_fails { run! "this is my sample test", /whhaaa/ }
+end

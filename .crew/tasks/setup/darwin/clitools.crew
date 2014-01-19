@@ -1,0 +1,13 @@
+desc "Sets up the cli dev tools"
+
+verify do
+  sh "gcc --help"
+end
+
+run do
+  poll("Waiting for install to complete") { verify }
+end
+
+test do
+  run!
+end

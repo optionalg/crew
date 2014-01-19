@@ -1,0 +1,17 @@
+desc "Writes a file"
+
+arg "path"
+arg "contents"
+
+verify do
+  assert_equal args.contents, fs_read(args.path)
+end
+
+run do
+  save_data(args.contents, args.path)
+end
+
+test do
+  fs_remove "/tmp/file-write-test"
+  run! "/tmp/file-write-test", "content"
+end

@@ -1,0 +1,18 @@
+desc "List all the files"
+
+arg "path"
+
+run do
+  sh("ls -A1 #{escape(args.path)}").split("\n")
+end
+
+test do
+  sh "mkdir /tmp/list-test"
+  sh "touch /tmp/list-test/1"
+  sh "touch /tmp/list-test/2"
+  sh "touch /tmp/list-test/3"
+  cd("/tmp/list-test") do
+    assert_equal %w(1 2 3), run!("/tmp/list-test")
+  end
+  sh "rm -rf /tmp/list-test"
+end

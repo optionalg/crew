@@ -1,0 +1,13 @@
+desc "Gets the version of git"
+
+setup do
+  setup_git
+end
+
+run do
+  sh("git --version").split(/\s+/)[2]
+end
+
+test do
+  run!
+end

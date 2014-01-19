@@ -1,0 +1,25 @@
+desc "Installs git"
+
+verify do
+  assert fs_which?("nmap")
+end
+
+test do
+  run!
+end
+
+hints "darwin"
+
+setup do
+  setup_homebrew
+end
+
+run do
+  brew_install "nmap"
+end
+
+hints "ubuntu"
+
+run do
+  apt_get_install "nmap"
+end

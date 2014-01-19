@@ -1,0 +1,12 @@
+desc "Check if a path is in the path"
+
+arg "path", "The path"
+
+run do
+  fs_paths.include?(args.path)
+end
+
+test do
+  fs_path_add "/tmp/hello"
+  run! "/tmp/hello"
+end

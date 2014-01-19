@@ -1,0 +1,25 @@
+desc "Installs watch"
+
+verify do
+  assert fs_which?("watch")
+end
+
+test do
+  run!
+end
+
+hints "darwin"
+
+setup do
+  setup_homebrew
+end
+
+run do
+  brew_install "watch"
+end
+
+hints "ubuntu"
+
+run do
+  apt_get_install "watch"
+end

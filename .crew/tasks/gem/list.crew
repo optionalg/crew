@@ -1,0 +1,18 @@
+desc "List all gems on your system"
+
+run do
+  out = sh "gem list --local"
+  gems = {}
+  out.split(/\n/).each do |gem_line|
+    name, versions = gem_line.split(' ', 2)
+    gems[name] = versions[/\((.*)\)/, 1].split(/,\s*/)
+  end
+  gems
+end
+
+test do
+  sh "gem uninstall asdf"
+  assert_not_include run!.keys, "asdf"
+  gem_install "asdf"
+  assert_include run!.keys, "asdf"
+end

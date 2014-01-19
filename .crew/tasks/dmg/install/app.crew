@@ -1,0 +1,24 @@
+desc "Install an application from a dmg"
+
+arg "dmg"
+arg "app_name"
+
+hints "darwin"
+
+verify do
+  assert fs_exists?("/Applications/#{args.app_name}.app")
+end
+
+run do
+  dmg_mount(args.dmg) do |mount_point|
+    fs_copy fs_join(mount_point, "#{args.app_name}.app"), "/Applications/#{args.app_name}.app", recursive: true
+  end
+end
+
+test do
+  response = http_get("http://www.sublimetext.com/3")
+  url = html_xpath_select(response, "//a[text()='OS X']/@href")[0]
+  http_download(url) do |file_path|
+    run! file_path, "Sublime Text"
+  end
+end

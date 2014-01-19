@@ -1,0 +1,26 @@
+desc "Install GitX-dev (http://rowanj.github.io/gitx/)"
+
+hints "darwin"
+
+verify do
+  assert fs_exists?("/Applications/GitX.app")
+  if fs_writeable_dir?("/usr/local/bin")
+    assert fs_exists?("/usr/local/bin/gitx")
+  end
+end
+
+run do
+  http_download("http://builds.phere.net/GitX/development/GitX-dev.dmg") do |file_path|
+    dmg_install_app file_path, "GitX"
+  end
+
+  if fs_writeable_dir?("/usr/local/bin")
+    sh "ln -s /Applications/GitX.app/Contents/Resources/gitx /usr/local/bin/gitx"
+  end
+end
+
+test do
+  run!
+end
+
+

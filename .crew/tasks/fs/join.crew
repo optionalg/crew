@@ -1,0 +1,11 @@
+desc "Creates a file path by joining together parts"
+
+args "parts"
+
+run do
+  File.join(args.parts)
+end
+
+test do
+  assert_equal "asd/qwe", fs_join("asd", "qwe")
+end

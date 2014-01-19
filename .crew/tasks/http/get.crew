@@ -1,0 +1,16 @@
+desc "Downloads a url and returns a string"
+
+arg :url, "The url to download"
+
+setup do
+  setup_curl
+end
+
+run do
+  sh("curl #{escape(args.url)}")
+end
+
+test do
+  out = run!("https://raw.github.com/joshbuddy/anybase/master/README.rdoc")
+  assert_match out, /Anybase/i
+end

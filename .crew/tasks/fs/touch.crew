@@ -1,0 +1,14 @@
+desc "Touch a file"
+
+arg "path"
+
+run do
+  sh "touch #{escape(args.path)}"
+end
+
+test do
+  assert !fs_exists?("/tmp/hello")
+  run! "/tmp/hello"
+  assert fs_exists?("/tmp/hello")
+  sh "rm /tmp/hello"
+end

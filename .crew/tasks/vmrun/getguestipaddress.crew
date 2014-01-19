@@ -1,0 +1,9 @@
+desc "gets the ip of the guest in vmware"
+
+arg "path"
+
+run "darwin" do
+  #vmrun_installtools! args.path # todo enable this..
+  out = sh "#{vmrun_bin} getGuestIPAddress #{escape(args.path)}"
+  out.chomp
+end

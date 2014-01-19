@@ -1,0 +1,27 @@
+desc "Installs rbenv"
+
+hints "darwin"
+
+opt "dest", default: proc { fs_join(env("HOME"), ".rbenv") }
+
+setup do
+  setup_git
+  setup_gcc
+end
+
+verify do
+  assert fs_which?("rbenv")
+end
+
+run do
+  git_clone "git://github.com/sstephenson/rbenv.git", dest: args.dest
+  bash_profile = fs_join(env("HOME"), ".profile")
+  fs_touch bash_profile
+  fs_path_add "$HOME/.rbenv/bin:$PATH"
+  fs_lines_add bash_profile, 'eval "$(rbenv init -)"'
+end
+
+test do
+  run!
+  sh "rbenv --help"
+end

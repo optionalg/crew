@@ -1,0 +1,17 @@
+desc "Installs screen"
+
+verify do
+  assert fs_which?("screen")
+end
+
+run "darwin" do
+  brew_install "screen"
+end
+
+run "ubuntu" do
+  apt_get_install "screen"
+end
+
+test do
+  run!
+end

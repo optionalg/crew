@@ -1,0 +1,23 @@
+desc "Compares values and raises an exception if they aren't equal"
+
+arg "expected", "The expected value"
+arg "actual", "The value to compare against"
+
+run do
+  assert args.expected == args.actual, "expected #{args.expected.inspect}, got #{args.actual.inspect}"
+end
+
+test do
+  run! true, true
+  run! nil, nil
+  run! "asdasd", "asdasd"
+  run! [1,2,3], [1,2,3]
+end
+
+test do
+  begin
+    assert 1, 2
+  rescue Crew::AssertionError
+    e.message =~ /expected 1, got 2/ or raise
+  end
+end

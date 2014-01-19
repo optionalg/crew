@@ -1,0 +1,22 @@
+desc "Installs development tools"
+
+hints "darwin"
+
+run do
+	setup_gcc
+	setup_xquartz
+	setup_homebrew
+	setup_git
+
+  # editors
+  setup_sublime3
+  setup_wget
+  setup_nmap
+  setup_virtualbox
+  setup_vagrant
+  setup_heroku_toolbelt
+end
+
+test do
+	run!
+end

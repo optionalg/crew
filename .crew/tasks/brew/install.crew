@@ -1,0 +1,24 @@
+desc "Install a package using homebrew"
+
+arg "name", "The name of the package to install"
+opt "version", "The version to install"
+
+hints "darwin"
+
+setup do
+  setup_homebrew
+end
+
+verify do
+  assert brew_installed?(args.name)
+end
+
+run do
+  sh "brew install #{args.name}"
+end
+
+test do
+  sh_with_code "brew uninstall fortune"
+  run! "fortune"
+  sh "fortune"
+end

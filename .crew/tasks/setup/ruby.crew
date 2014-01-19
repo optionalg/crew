@@ -1,0 +1,13 @@
+desc "Installs Ruby"
+
+setup do
+  setup_rvm
+end
+
+run do
+  rvm_install "ruby-2.0.0-p353", default: true
+end
+
+test do
+  run!
+end

@@ -1,0 +1,30 @@
+desc "Mount a dmg"
+
+arg "path", "The path to the dmg", type: String
+
+hints "darwin"
+
+block required: true do
+  arg "The path to the mount point", type: String
+end
+
+run do
+  dev_path, type, mount_path = sh("hdiutil attach #{escape(args.path)}").split("\n").last.split(/\s+\t/)
+  if args.block
+    begin
+      args.block.call(mount_path)
+    ensure
+      sh?("umount #{escape(mount_path)}")
+    end
+  else
+    mount_path
+  end
+end
+
+test do
+  save_file fs_join(home_dir, "../spec/fixtures/dmg/mount/good.dmg"), "/tmp/good.dmg"
+  run! "/tmp/good.dmg" do |path|
+    assert_equal "This is great", fs_read(fs_join(path, "test.txt"))
+  end
+  assert_fails { fs_read(fs_join(path, "test.txt")) }
+end

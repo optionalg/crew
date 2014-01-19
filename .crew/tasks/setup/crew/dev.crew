@@ -1,0 +1,14 @@
+desc "Sets up development for crew"
+
+hints "darwin"
+
+run do
+  setup_gcc
+  setup_homebrew
+  setup_git
+  setup_vmware
+end
+
+test do
+  run!
+end

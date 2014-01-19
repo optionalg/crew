@@ -1,0 +1,11 @@
+desc "Update apt-get"
+
+hints "ubuntu"
+
+run do
+  sh "apt-get update -y", sudo: true
+end
+
+test do
+  run!
+end

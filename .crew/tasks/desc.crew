@@ -1,0 +1,11 @@
+desc "Describes a task"
+
+arg "name", "The name of the task"
+
+run do
+  task(args.name).desc
+end
+
+test do
+  assert_equal "Describes a task", run!("desc")
+end

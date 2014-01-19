@@ -1,0 +1,11 @@
+desc "Gets the version of the currently installed ruby"
+
+run do
+  sh("ruby --version").split(/\s/)[1]
+end
+
+test "darwin" do
+  setup_rvm
+  rvm_install "ruby-2.0.0-p353", default: true
+  assert_equal "2.0.0p353", ruby_version
+end

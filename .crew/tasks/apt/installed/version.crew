@@ -1,0 +1,17 @@
+desc "Gets the version number of an installed apt package"
+
+arg "name", "The name of the package to get"
+
+hints "ubuntu"
+
+run do
+  assert apt_installed?(args.name)
+  sh("apt-cache policy #{args.name}")[/Version: (.*?)\n/m, 1]
+end
+
+test do
+  assert_fails { run! "sl" }
+  apt_get_install "sl"
+  version = sh("apt-cache policy #{args.name}")[/Version: (.*?)\n/m, 1]
+  assert_equal version, run!("sl")
+end

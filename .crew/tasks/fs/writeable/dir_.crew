@@ -1,0 +1,20 @@
+desc "Tests if a directory is writeable"
+
+arg "path"
+
+run do
+	fs_directory?(args.path) && fs_writeable?(args.path)
+end
+
+test do
+	assert_not run!("/tmp/write-path")
+	sh "mkdir /tmp/write-path"
+	assert run!("/tmp/write-path")
+end
+
+test do
+	assert_not run!("/tmp/nonwrite-path")
+	sh "mkdir /tmp/nonwrite-path"
+	sh "chmod 400 /tmp/nonwrite-path"
+	assert_not run!("/tmp/nonwrite-path")
+end

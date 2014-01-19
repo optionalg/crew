@@ -1,0 +1,21 @@
+desc "Install a package from a dmg"
+
+arg "dmg", "The path to the dmg"
+arg "pkg_name", "The name of the package to install"
+
+hints "darwin"
+
+run do
+  dmg_mount(args.dmg) do |mount_point|
+    app_name = File.basename(fs_list(mount_point).find{|f| File.extname(f) == '.app'})[/(.*?)\.app$/, 1]
+    fs_copy fs_join(mount_point, "#{app_name}.app"), "/Applications/#{app_name}", recursive: true
+  end
+end
+
+test do
+  response = http_get("http://www.sublimetext.com/3")
+  url = html_xpath_select(response, "//a[text()='OS X']/@href")[0]
+  http_download(url) do |file_path|
+    run! file_path, "Sublime Text"
+  end
+end

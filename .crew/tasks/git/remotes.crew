@@ -1,0 +1,13 @@
+desc "Get a list of remotes"
+
+run do
+  assert fs_directory?(".git")
+  sh("git remote").split("\n")
+end
+
+test do
+  cd "/tmp"
+  git_clone "https://github.com/joshbuddy/anybase.git"
+  cd "anybase"
+  assert_equal ["origin"], run!
+end

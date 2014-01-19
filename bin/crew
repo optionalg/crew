@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+
+# needed due to bundler interactions .. oh god i wish i could remove this!
+$LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
+
+require 'crew'
+Crew::CLI.new.process(ARGV)

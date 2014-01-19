@@ -1,0 +1,24 @@
+desc "Installs a package via apt-get"
+
+arg "name", "The name of the package to install"
+opt "version", "The version of the package to install"
+
+hints "ubuntu"
+
+verify do
+  assert apt_installed?(args.name, args.version)
+end
+
+run do
+  cmd = "apt-get install -y #{args.name}"
+  if args.version
+    cmd << "=#{args.version}"
+  end
+  sh cmd, sudo: true
+end
+
+test do
+  assert !apt_installed?("sl")
+  run! "sl"
+  assert apt_installed?("sl")
+end

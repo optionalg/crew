@@ -1,0 +1,22 @@
+desc "Add a path"
+
+arg "path"
+
+verify do
+  assert fs_path_include?(args.path)
+end
+
+run do
+  bashrc_file = fs_join(env_home, '.bash_profile')
+  fs_touch bashrc_file
+  fs_lines_add bashrc_file, "export PATH=$PATH:#{escape(args.path)}"
+  reconnect!
+end
+
+test do
+  sh "mkdir -p /tmp/random"
+  save_data("#!/bin/bash\necho -n hello", "/tmp/random/hello.sh")
+  sh "chmod 755 /tmp/random/hello.sh"
+  run! "/tmp/random"
+  assert_equal "hello", sh("/tmp/random/hello.sh")
+end

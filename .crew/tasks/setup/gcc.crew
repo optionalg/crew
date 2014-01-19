@@ -1,0 +1,24 @@
+desc "Installs gcc"
+
+verify do
+  sh "gcc --help"
+end
+
+# TODO NOOO!
+run ["darwin", "10.9.0"], ["darwin", "10.9.1"] do
+  setup_darwin_clitools
+end
+
+run "ubuntu" do
+  apt_get_install "build-essential"
+end
+
+run do
+  poll "You need gcc in order to continue" do
+    sh "gcc --help"
+  end
+end
+
+test do
+  run!
+end

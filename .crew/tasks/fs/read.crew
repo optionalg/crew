@@ -1,0 +1,15 @@
+desc "Reads a file"
+
+arg :file, "The file to read"
+
+run do
+  sh "cat #{escape(args.file)}"
+end
+
+test do
+  contents = "this\nis my\nfile"
+  path = "/tmp/fs_read_text.txt"
+  save_data(contents, path)
+  assert_equal contents, run!(path)
+  sh "rm #{path}"
+end

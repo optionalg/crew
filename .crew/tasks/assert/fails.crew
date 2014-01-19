@@ -1,0 +1,28 @@
+desc "Assert a block fails to run"
+
+opt "matcher"
+block required: true
+
+run do
+  begin
+    args.block.call
+    assert false, "excepted this block to fail, but it passed"
+  rescue Crew::AssertionError => e
+    assert_match e.message, args.matcher if args.matcher
+    assert true
+  end
+end
+
+test do
+  assert_fails do
+    assert false
+  end
+end
+
+test do
+  assert_fails do
+    assert_fails do
+      assert true
+    end
+  end
+end

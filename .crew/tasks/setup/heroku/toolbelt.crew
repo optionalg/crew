@@ -1,0 +1,17 @@
+desc "Install Heroku toolbelt"
+
+hints "darwin"
+
+verify do
+  assert fs_which?("heroku")
+end
+
+run do
+  http_download("https://toolbelt.heroku.com/download/osx", preserve_on_error: true, target: "heroku.pkg") do |file_path|
+    sh("/usr/sbin/installer -pkg #{escape(file_path)} -target /", sudo: true)
+  end
+end
+
+test do
+  run!
+end
