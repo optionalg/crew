@@ -14,11 +14,13 @@ if [ ! -e LOCAL_GEM ]; then
     $USER_GEM_DIR/bin/crew run fs_path_add "$USER_GEM_DIR/bin"
   fi
 else
-  gem install -q --user-install $LOCAL_GEM
-  gem install crew -v0.0.1
+  gem install crew -q --user-install -v0.0.1
   USER_GEM_DIR=$(ruby -rubygems -e 'puts Gem.user_dir')
   $USER_GEM_DIR/bin/crew run fs_path_add "$USER_GEM_DIR/bin"
 fi
 
-crew init ~
-crew help
+if [ ! -d $HOME/.crew ]; then
+  crew init ~
+fi
+
+echo "All done!"
