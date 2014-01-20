@@ -4,7 +4,7 @@
 
 echo "Installing crew"
 LOCAL_GEM=$(find . -name *.gem | head -n 1)
-if [ ! -e LOCAL_GEM ]; then
+if [ ! -e $LOCAL_GEM ]; then
   type rvm | head -n 1 | grep -q 'rvm is'
   if [ $? -eq "0" ]; then
     gem install $LOCAL_GEM
